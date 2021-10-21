@@ -1,6 +1,11 @@
 export default class Request {
-    getInfo(url){
+    static getInfo(url){
         return fetch(url)
-            .then(response => response.json())
+            .then(response => response.json());
+    }
+    static deleteItem(url){
+        return fetch(url, {
+            method: "DELETE",
+        });
     }
 }

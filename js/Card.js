@@ -1,6 +1,8 @@
+import Request from "./Request.js";
+
 export default class Card {
-    constructor({name, email, title, body}) {
-        this.data = {name, email, title, body};
+    constructor({name, email, title, body, id}) {
+        this.data = {name, email, title, body, postId: id};
         this.element = document.createElement("div");
     }
     render(outputElem){
@@ -29,6 +31,8 @@ export default class Card {
         output.append(this.element);
     }
     removeCard = () => {
+        console.log(this)
+        Request.deleteItem(`https://ajax.test-danit.com/api/json/posts/${this.data.postId}`).then(data => console.log(data))
         this.element.remove();
     }
 }
