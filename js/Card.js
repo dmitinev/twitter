@@ -32,7 +32,7 @@ export default class Card {
     }
     removeCard = () => {
         console.log(this)
-        Request.deleteItem(`https://ajax.test-danit.com/api/json/posts/${this.data.postId}`).then(data => console.log(data))
-        this.element.remove();
+        Request.deleteItem(`https://ajax.test-danit.com/api/json/posts/${this.data.postId}`).then(() => this.element.remove());
+
     }
 }
