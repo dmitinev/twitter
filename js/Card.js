@@ -1,8 +1,34 @@
 export default class Card {
     constructor({name, email, title, body}) {
         this.data = {name, email, title, body};
+        this.element = document.createElement("div");
     }
-    render(template, outputElem){
-        outputElem.insertAdjacentHTML("beforeend", Mustache.render(template, this.data));
+    render(outputElem){
+        const output = document.querySelector(outputElem);
+        this.element.classList.add("card");
+        const header = document.createElement("div");
+        header.classList.add("card-header");
+        header.innerText = `${this.data.name}, ${this.data.email}`;
+        this.element.prepend(header);
+        const body = document.createElement("div");
+        body.classList.add("card-body");
+        const cardTitle = document.createElement("h5");
+        cardTitle.classList.add("card-title");
+        cardTitle.innerText = `${this.data.title}`;
+        const cardText = document.createElement("p");
+        cardText.classList.add("card-text");
+        cardText.innerText = `${this.data.body}`
+        const removeBtn = document.createElement("button");
+        removeBtn.className = "btn btn-danger post_remove_btn";
+        removeBtn.innerText = "Удалить пост";
+        removeBtn.addEventListener("click", this.removeCard)
+        body.append(cardTitle);
+        body.append(cardText);
+        body.append(removeBtn);
+        this.element.append(body);
+        output.append(this.element);
+    }
+    removeCard = () => {
+        this.element.remove();
     }
 }
