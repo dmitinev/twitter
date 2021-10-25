@@ -2,24 +2,35 @@ import Request from "./Request.js";
 import Card from "./Card.js";
 
 export default class Feed {
-   renderLoader(outputElem){
-
+   constructor() {
+      this.listCards = [];
+      this.loader = document.createElement("div");
    }
-   async createFeed(){
+
+   renderLoader(outputElem) {
+      const output = document.querySelector(outputElem);
+      this.loader.className = "lds-dual-ring";
+      output.append(this.loader);
+   }
+
+   async createFeed() {
       try {
+         this.renderLoader(".main_content");
          const users = await Request.getInfo("https://ajax.test-danit.com/api/json/users");
+         console.log(users)
          for (const {id, name, email} of users) {
             const posts = await Request.getInfo(`https://ajax.test-danit.com/api/json/users/${id}/posts`);
             for (const {title, body, id} of posts) {
-               const card = new Card({name, email, title, body, id});
-               card.render(".main_content");
+               this.listCards.push(new Card({name, email, title, body, id}));
             }
          }
-      }
-      catch (err) {
+      } catch (err) {
          console.log(err);
       }
-
+      this.loader.remove();
+      for (const card of this.listCards) {
+         card.render(".main_content");
+      }
    }
 
 }
