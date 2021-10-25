@@ -4,35 +4,40 @@ export default class Card {
     constructor({name, email, title, body, id}) {
         this.data = {name, email, title, body, postId: id};
         this.element = document.createElement("div");
+        this.header = document.createElement("div");
+        this.cardBody = document.createElement("div");
+        this.removeBtn = document.createElement("button");
         this.cardTitle = document.createElement("h5");
         this.cardText = document.createElement("p");
         this.editTitle = document.createElement("i");
     }
-    render(outputElem){
+    render(outputElem, edited= false){
         const output = document.querySelector(outputElem);
         this.element.classList.add("card");
-        const header = document.createElement("div");
-        header.classList.add("card-header");
-        header.innerText = `${this.data.name}, ${this.data.email}`;
-        this.element.prepend(header);
-        const body = document.createElement("div");
-        body.classList.add("card-body");
+        this.header.classList.add("card-header");
+        this.header.innerText = `${this.data.name}, ${this.data.email}`;
+        this.element.prepend(this.header);
+        this.cardBody.classList.add("card-cardBody");
         this.cardTitle.classList.add("card-title");
         this.cardTitle.innerText = `${this.data.title}`;
         this.editTitle.className = "fas fa-pen fa-lg";
         this.cardText.classList.add("card-text");
         this.cardText.innerText = `${this.data.body}`
-        const removeBtn = document.createElement("button");
-        removeBtn.className = "btn btn-danger post_remove_btn";
-        removeBtn.innerText = "Удалить пост";
-        removeBtn.addEventListener("click", this.removeCard)
+        this.removeBtn.className = "btn btn-danger post_remove_btn";
+        this.removeBtn.innerText = "Удалить пост";
+        this.removeBtn.addEventListener("click", this.removeCard)
         this.editTitle.addEventListener("click", this.editCard)
-        body.append(this.cardTitle);
-        body.append(this.editTitle);
-        body.append(this.cardText);
-        body.append(removeBtn);
-        this.element.append(body);
-        output.prepend(this.element);
+        this.cardBody.append(this.cardTitle);
+        this.cardBody.append(this.editTitle);
+        this.cardBody.append(this.cardText);
+        this.cardBody.append(this.removeBtn);
+        this.element.append(this.cardBody);
+        if (edited){
+            output.prepend(this.element);
+        }
+        else {
+            output.append(this.element);
+        }
     }
     removeCard = () => {
         Request.deleteItem(`https://ajax.test-danit.com/api/json/posts/${this.data.postId}`).then(() => this.element.remove());
@@ -56,10 +61,12 @@ export default class Card {
         saveIcon.addEventListener("click", ()=>{
             Request.changeCardData(`https://ajax.test-danit.com/api/json/posts/${this.data.postId}`, {...this.data, title: editTitleField.value, body: editText.value})
                .then((response) => response.json()).then(jsonData => {
-                console.log(jsonData)
                 this.data = jsonData.body;
                 this.element.remove();
-                this.render(".main_content");
+                saveIcon.remove();
+                editText.remove();
+                editTitleField.remove();
+                this.render(".main_content", true);
             });
         })
     }
