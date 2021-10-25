@@ -1,0 +1,15 @@
+.card-title {
+    display: inline-flex;
+    max-width: 70%;
+    margin: 0 10px 10px 0;
+}
+.card-text {
+    display: flex;
+}
+.fas.fa-pen {
+    cursor: pointer;
+}
+.title-edit-field {
+    overflow: visible;
+    min-width: 50%;
+}

@@ -6,6 +6,7 @@ export default class Card {
         this.element = document.createElement("div");
         this.cardTitle = document.createElement("h5");
         this.cardText = document.createElement("p");
+        this.editTitle = document.createElement("i");
     }
     render(outputElem){
         const output = document.querySelector(outputElem);
@@ -18,20 +19,17 @@ export default class Card {
         body.classList.add("card-body");
         this.cardTitle.classList.add("card-title");
         this.cardTitle.innerText = `${this.data.title}`;
-        const editTitle = document.createElement("span");
-        editTitle.classList.add("titleEdit");
+        this.editTitle.className = "fas fa-pen fa-lg";
         this.cardText.classList.add("card-text");
         this.cardText.innerText = `${this.data.body}`
-        const editText = document.createElement("span");
-        editText.classList.add("textEdit");
         const removeBtn = document.createElement("button");
         removeBtn.className = "btn btn-danger post_remove_btn";
         removeBtn.innerText = "Удалить пост";
         removeBtn.addEventListener("click", this.removeCard)
+        this.editTitle.addEventListener("click", this.editCard)
         body.append(this.cardTitle);
-        body.append(editTitle);
+        body.append(this.editTitle);
         body.append(this.cardText);
-        body.append(editText);
         body.append(removeBtn);
         this.element.append(body);
         output.append(this.element);
@@ -41,6 +39,11 @@ export default class Card {
 
     }
     editCard = () => {
-
+        this.editTitle.remove();
+        const editTitleField = document.createElement("input");
+        editTitleField.setAttribute("type", "text");
+        editTitleField.classList.add("title-edit-field");
+        editTitleField.value = this.cardTitle.innerText;
+        this.cardTitle.replaceWith(editTitleField);
     }
 }
