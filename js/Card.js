@@ -39,11 +39,23 @@ export default class Card {
 
     }
     editCard = () => {
-        this.editTitle.remove();
+        const saveIcon = document.createElement("i");
+        saveIcon.className = "fas fa-save";
+        this.editTitle.replaceWith(saveIcon);
         const editTitleField = document.createElement("input");
         editTitleField.setAttribute("type", "text");
         editTitleField.classList.add("title-edit-field");
         editTitleField.value = this.cardTitle.innerText;
         this.cardTitle.replaceWith(editTitleField);
+        const editText = document.createElement("textarea");
+        editText.setAttribute("rows", "7");
+        editText.setAttribute("cols", "50");
+        editText.classList.add("text-edit-field");
+        editText.value = this.cardText.innerText;
+        this.cardText.replaceWith(editText);
+        saveIcon.addEventListener("click", ()=>{
+            Request.changeCardData(`https://ajax.test-danit.com/api/json/posts/${this.data.postId}`, {...this.data, title:editTitleField.value, body:editText.value})
+               .then((response) => response.json()).then(data => console.log(data));
+        })
     }
 }

@@ -8,4 +8,13 @@ export default class Request {
             method: "DELETE",
         });
     }
+    static changeCardData(url ,body){
+        return fetch(url,{
+            method: "PUT",
+            body: JSON.stringify({body}),
+            headers:{
+                'Content-Type': 'application/json',
+            }
+        })
+    }
 }
