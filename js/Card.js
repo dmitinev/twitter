@@ -32,7 +32,7 @@ export default class Card {
         body.append(this.cardText);
         body.append(removeBtn);
         this.element.append(body);
-        output.append(this.element);
+        output.prepend(this.element);
     }
     removeCard = () => {
         Request.deleteItem(`https://ajax.test-danit.com/api/json/posts/${this.data.postId}`).then(() => this.element.remove());
@@ -54,8 +54,13 @@ export default class Card {
         editText.value = this.cardText.innerText;
         this.cardText.replaceWith(editText);
         saveIcon.addEventListener("click", ()=>{
-            Request.changeCardData(`https://ajax.test-danit.com/api/json/posts/${this.data.postId}`, {...this.data, title:editTitleField.value, body:editText.value})
-               .then((response) => response.json()).then(data => console.log(data));
+            Request.changeCardData(`https://ajax.test-danit.com/api/json/posts/${this.data.postId}`, {...this.data, title: editTitleField.value, body: editText.value})
+               .then((response) => response.json()).then(jsonData => {
+                console.log(jsonData)
+                this.data = jsonData.body;
+                this.element.remove();
+                this.render(".main_content");
+            });
         })
     }
 }
